@@ -113,15 +113,16 @@ common = {
 
 -- based partially on http://lua-users.org/wiki/FormattingNumbers
 -- optionally applies format like string.format() would
--- inserts thousands separator into num 
+-- inserts thousands separator into val
+-- returns non-numbers unchanged
 -- if global useCommaDecimals is true returns formatNumber(1234567, '%.3f') as "1.234.567,000"
 --  otherwise as "1,234,567.000"
-function formatNumber(num, format)
-    local ret = num
-    if type(num) == 'number' then
+function formatNumber(val, format)
+    local ret = val
+    if type(val) == 'number' then
         local separator = ','
         if format then
-            ret = string.format(format, num)
+            ret = string.format(format, val)
         end
         if useCommaDecimals then
             separator = '.'
