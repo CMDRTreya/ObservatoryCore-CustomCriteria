@@ -263,3 +263,16 @@ if (scan.StarType == 'M' or scan.StarType == 'N' or string.startsWith(scan.StarT
   end
 end
 ::End::
+
+
+--[[
+Criteria for detecting "Taylor's Rings"
+named after Elizabeth Taylor's incredibly thin rings.
+Found in E:O discord
+--]]
+
+::Criteria::
+if (scan.Rings and scan.Rings.Count == 1 and string.find(scan.Rings[0].Name, ' Ring') and ((scan.Rings[0].OuterRad - scan.Rings[0].InnerRad) / scan.Radius < 0.25)) then
+  return true, "Taylor's Ring", 'Ring width: ' .. math.floor((scan.Rings[0].OuterRad - scan.Rings[0].InnerRad) / 1000)..", "..scan.PlanetClass .. ", " .. math.floor(scan.DistanceFromArrivalLS) .. " Ls"
+end
+::End::
