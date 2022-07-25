@@ -157,6 +157,10 @@ notifyNoAtmoBio and biosignals > 0 and scan.AtmosphereType == 'None'
 'Temp: ' .. formatNumber(scan.SurfaceTemperature, '%.0f') .. ' K, Dist: ' .. formatNumber(math.ceil(scan.DistanceFromArrivalLS)) .. ' ls, Grav: ' .. formatNumber(convertToStandardGravity(scan.SurfaceGravity), '%.2f') .. ' g\n' .. (scan.Volcanism or 'No volcanism')
 
 
+::Bio signals::
+biosignals > 4
+
+
 -- Landable High/Low Gravity
 ::Criteria::
 if (thresholdHighG or thresholdLowG) and scan.Landable then
