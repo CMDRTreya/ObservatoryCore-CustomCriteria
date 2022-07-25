@@ -93,13 +93,6 @@ useCommaDecimals = true
 
 -- End of options -----------------------------------------------------------------------
 
-
-
-
-
-
-
-
 common = {
     ['arsenic']    = true,
     ['chromium']   = true,
@@ -109,7 +102,6 @@ common = {
     ['zinc']       = true,
     ['zirconium']  = true,
 }
-
 
 -- based partially on http://lua-users.org/wiki/FormattingNumbers
 -- optionally applies format like string.format() would
@@ -153,12 +145,12 @@ if notifyGoodSelenium then notifyGoodSelenium = convertToMSecSqur(notifyGoodSele
 if notifyGreatSelenium then notifyGreatSelenium = convertToMSecSqur(notifyGreatSelenium) end
 ::End::
 
---[[
-    brain trees
-    temp below 500K
-    volcanism
-    no atmosphere
-]]
+
+-- brain trees
+-- temp below 500K
+-- volcanism
+-- no atmosphere
+
 ::Bio on vacuum landable::
 notifyNoAtmoBio and biosignals > 0 and scan.AtmosphereType == 'None'
 ::Detail::
@@ -189,33 +181,14 @@ thresholdRadius and scan.Landable and scan.Radius < thresholdRadius
 ::Detail::
 'Radius: ' .. formatNumber(math.ceil(scan.Radius / 1000)) .. ' km'
 
-
-::Undiscovered System::
-notifyUndiscovered and scan.ScanType ~= "NavBeaconDetail" and scan.PlanetClass ~= "Barycentre" and not scan.WasDiscovered and scan.DistanceFromArrivalLS == 0
-
-
 ::Uncommon Star::
 notifyUncommonStars and (uncommonStars[scan.StarType] ~= nil)
 ::Detail::
 uncommonStars[scan.StarType]
 
 
--- Find Ringed M Stars, Neutron Stars and White Dwarfs
-::Criteria::
-if (scan.StarType == 'M' or scan.StarType == 'N' or string.startsWith(scan.StarType, "D")) and scan.Rings then
-  for ring in rings(scan.Rings) do
-      if (string.find(ring.name, "Ring")) then
-        local starTypeDesc = 'Neutron'
-        if string.startsWith(scan.StarType, "D") then
-          starTypeDesc = 'White Dwarf ('.. scan.StarType .. ')'
-        elseif scan.StarType == 'M' then
-          starTypeDesc = 'M-class'
-        end
-        return true, 'Ringed '.. starTypeDesc ..' Star', ''
-      end
-  end
-end
-::End::
+::Helium Gas Giant::
+scan.PlanetClass == "Helium gas giant"
 
 
 -- Unmapped valuables
@@ -263,5 +236,30 @@ if scan.Landable and scan.Materials and geosignals > 0 then
             return true, quality .. ' Selenium Source', formatNumber(seleniumPercent, '%.1f') .. '%'
         end
     end
+end
+::End::
+
+-----------------------------------------------------------------------------------------------
+-- Below: Unmodified excerpts from https://cdn.discordapp.com/attachments/916086414943354890/951307948280397884/TME_Custom.lua
+
+
+::Undiscovered System::
+notifyUndiscovered and scan.ScanType ~= "NavBeaconDetail" and scan.PlanetClass ~= "Barycentre" and not scan.WasDiscovered and scan.DistanceFromArrivalLS == 0
+
+
+-- Find Ringed M Stars, Neutron Stars and White Dwarfs
+::Criteria::
+if (scan.StarType == 'M' or scan.StarType == 'N' or string.startsWith(scan.StarType, "D")) and scan.Rings then
+  for ring in rings(scan.Rings) do
+      if (string.find(ring.name, "Ring")) then
+        local starTypeDesc = 'Neutron'
+        if string.startsWith(scan.StarType, "D") then
+          starTypeDesc = 'White Dwarf ('.. scan.StarType .. ')'
+        elseif scan.StarType == 'M' then
+          starTypeDesc = 'M-class'
+        end
+        return true, 'Ringed '.. starTypeDesc ..' Star', ''
+      end
+  end
 end
 ::End::
