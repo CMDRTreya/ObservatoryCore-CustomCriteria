@@ -180,6 +180,12 @@ end
 ::End::
 
 
+::High Mass Landable::
+scan.Landable and scan.MassEM > 5
+::Detail::
+'Mass: ' .. formatNumber(scan.MassEM, "%.1f") .. ' EM\nRadius: ' .. formatNumber(math.ceil(scan.Radius / 1000)) .. ' km\n Gravity: ' .. formatNumber(convertToStandardGravity(scan.SurfaceGravity), "%.2f") .. " g"
+
+
 ::Small landable::
 thresholdRadius and scan.Landable and scan.Radius < thresholdRadius
 ::Detail::
