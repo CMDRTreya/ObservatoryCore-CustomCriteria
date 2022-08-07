@@ -88,10 +88,16 @@ thresholdRadius = 300
 notifyGreatSelenium = 0
 notifyGoodSelenium = 0.7 -- lower Se content but fast falling chunks
 
+-- Notification for Helium rich regions
+-- value in percent
+MINIMUM_HELIUM_FOR_NOTIFICATION = 29.5
+
 -- if true formats numbers as 1.234.567,89 instead of 1,234,567.89
 useCommaDecimals = true
 
 -- End of options -----------------------------------------------------------------------
+
+last_helium_boxel = ''
 
 common = {
     ['arsenic']    = true,
@@ -143,6 +149,24 @@ if thresholdHighG then thresholdHighG = convertToMSecSqur(thresholdHighG) end
 if thresholdRadius then thresholdRadius = thresholdRadius * 1000 end
 if notifyGoodSelenium then notifyGoodSelenium = convertToMSecSqur(notifyGoodSelenium) end
 if notifyGreatSelenium then notifyGreatSelenium = convertToMSecSqur(notifyGreatSelenium) end
+::End::
+
+
+-- Notifies once per boxel if helium content is above threshold
+-- Courtesy of CMDR Matt G
+-- https://discord.com/channels/787793855252660235/787793855981944885/1000027238940561428
+::Criteria::
+if(scan.StarSystem and scan.PlanetClass and (string.match(scan.PlanetClass,'Helium') or string.match(scan.PlanetClass,'Sudarsky'))) then
+    this_boxel = scan.StarSystem:gsub('[%d-]+$','')
+    if(this_boxel ~= last_helium_boxel) then
+        for mat in materials(scan.AtmosphereComposition) do
+            if mat.name == 'Helium' and mat.percent >= MINIMUM_HELIUM_FOR_NOTIFICATION then
+                last_helium_boxel = this_boxel
+                return true,'Possible High Helium Boxel',string.format("%.2f",mat.percent) .. '% Helium seen'
+            end
+        end
+    end
+end
 ::End::
 
 
