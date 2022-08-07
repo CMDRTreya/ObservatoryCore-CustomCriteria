@@ -202,14 +202,21 @@ scan.PlanetClass == "Helium gas giant"
 
 
 -- Unmapped valuables
+-- TODO proper planetType mapping for Rocky/Metallic
 ::Criteria::
 local planetType
 
 if notifyValuables then
     if highValuePlanet[scan.PlanetClass] and not scan.WasMapped then
         planetType = highValuePlanet[scan.PlanetClass]
-    elseif scan.TerraformState and #scan.TerraformState > 0 and not scan.WasMapped then
-        planetType = 'Terraformable'
+        -- if scan.TerraformState  and #scan.TerraformState > 0 then
+        --     planetType = 'Terraformable ' .. planetType
+        end
+    if scan.TerraformState and #scan.TerraformState > 0 and not scan.WasMapped then
+        if not planetType then
+            planetType = scan.PlanetClass
+        end
+        planetType = 'Terraformable ' .. planetType
     end
     
     if planetType then
